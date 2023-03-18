@@ -7,7 +7,6 @@ import (
 	"net"
 	"net/http"
 	"net/http/httputil"
-	"net/url"
 	"time"
 )
 
@@ -41,7 +40,10 @@ func HandleProxy(w http.ResponseWriter, r *http.Request) {
 	client.Transport = tr
 	dumpreq, _ := httputil.DumpRequest(r, true)
 	newreq, _ := http.ReadRequest(bufio.NewReader(bytes.NewBuffer(dumpreq)))
-	newreq.URL, _ = url.Parse(baseUrl)
+	req, _ := http.NewRequest(newreq.Method, baseUrl, newreq.Body)
+	for k, v := range r.Header {
+		req.Header[k] = v
+	}
 	rsp, err := client.Do(newreq)
 	if err != nil {
 		w.WriteHeader(http.StatusBadGateway)
