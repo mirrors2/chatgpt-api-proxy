@@ -2,9 +2,9 @@ name: Docker Image CI
 #触发器设置
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 #项目任务，任务之间可以并行调度
 jobs:
@@ -51,4 +51,4 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
         repository: mirrors2/chatgpt-api-proxy
-        readme-filepath: ./cmd/chat/README.md
+        readme-filepath: ./README.md
