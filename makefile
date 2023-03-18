@@ -20,7 +20,7 @@ LDFlags=" \
 build:
 # mkdir -p bin/ && go build -ldflags $(LDFlags) -o ./bin/ ./...
 	rm -rf qq.tgz /bin/qq 
-	mkdir -p bin/  && CGO_ENABLED=0 go build -ldflags "-s -w" -o ./bin/chatgpt-api-proxy ./...
+	mkdir -p bin/  && CGO_ENABLED=0 go build -ldflags "-s -w" -o ./bin/chatgpt-api-proxy .
 	upx -9 bin/chatgpt-api-proxy
 
 .PHONY:docker
