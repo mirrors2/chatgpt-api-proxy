@@ -1,11 +1,18 @@
 package main
 
 import (
+	"bufio"
+	"bytes"
 	"crypto/tls"
 	"net"
 	"net/http"
 	"net/http/httputil"
+	"net/url"
 	"time"
+)
+
+var (
+	baseUrl = "https://api.openai.com/v1/chat/completions"
 )
 
 func main() {
@@ -32,8 +39,10 @@ func HandleProxy(w http.ResponseWriter, r *http.Request) {
 		TLSClientConfig:       &tls.Config{InsecureSkipVerify: true},
 	}
 	client.Transport = tr
-
-	rsp, err := client.Do(r)
+	dumpreq, _ := httputil.DumpRequest(r, true)
+	newreq, _ := http.ReadRequest(bufio.NewReader(bytes.NewBuffer(dumpreq)))
+	newreq.URL, _ = url.Parse(baseUrl)
+	rsp, err := client.Do(newreq)
 	if err != nil {
 		w.WriteHeader(http.StatusBadGateway)
 		w.Write([]byte(err.Error()))
