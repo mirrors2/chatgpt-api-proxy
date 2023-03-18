@@ -30,7 +30,7 @@ services:
 
 curl http://your.domains/v1/chat/completions \
   -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer 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' \
+  -H 'Authorization: Bearer sk-yourrrgjhSJjx4bsSJjYsT3BlbkFJyMQjAH3sBcUzvGYFyGcl' \
 
   -d '{
   "model": "gpt-3.5-turbo",
