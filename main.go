@@ -22,7 +22,7 @@ func main() {
 
 	// 启动代理服务器
 	fmt.Println("API proxy server is listening on port 8080")
-	if err := http.ListenAndServe(":8080", router); err != nil {
+	if err := http.ListenAndServe(":80", router); err != nil {
 		panic(err)
 	}
 }
