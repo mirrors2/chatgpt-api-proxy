@@ -21,7 +21,7 @@ func main() {
 	router.HandleFunc("/v1/chat/completions", HandleProxy)
 
 	// 启动代理服务器
-	fmt.Println("API proxy server is listening on port 8080")
+	fmt.Println("API proxy server is listening on port 80")
 	if err := http.ListenAndServe(":80", router); err != nil {
 		panic(err)
 	}
