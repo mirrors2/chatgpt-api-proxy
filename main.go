@@ -1,23 +1,28 @@
 package main
 
 import (
-	"bufio"
-	"bytes"
 	"crypto/tls"
+	"fmt"
+	"io"
 	"net"
 	"net/http"
-	"net/http/httputil"
 	"time"
+
+	"github.com/gorilla/mux"
 )
 
 var (
-	baseUrl = "https://api.openai.com/v1/chat/completions"
+	baseUrl = "https://api.openai.com"
 )
 
 func main() {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/v1/chat/completions", HandleProxy)
-	if err := http.ListenAndServe(":80", mux); err != nil {
+	router := mux.NewRouter()
+	// 路由转发
+	router.HandleFunc("/v1/chat/completions", HandleProxy)
+
+	// 启动代理服务器
+	fmt.Println("API proxy server is listening on port 8080")
+	if err := http.ListenAndServe(":8080", router); err != nil {
 		panic(err)
 	}
 }
@@ -38,18 +43,33 @@ func HandleProxy(w http.ResponseWriter, r *http.Request) {
 		TLSClientConfig:       &tls.Config{InsecureSkipVerify: true},
 	}
 	client.Transport = tr
-	dumpreq, _ := httputil.DumpRequest(r, true)
-	newreq, _ := http.ReadRequest(bufio.NewReader(bytes.NewBuffer(dumpreq)))
-	req, _ := http.NewRequest(newreq.Method, baseUrl, newreq.Body)
-	for k, v := range r.Header {
-		req.Header[k] = v
-	}
-	rsp, err := client.Do(newreq)
+
+	// 创建 API 请求
+	req, err := http.NewRequest(r.Method, baseUrl+r.URL.Path, r.Body)
 	if err != nil {
-		w.WriteHeader(http.StatusBadGateway)
-		w.Write([]byte(err.Error()))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	data, _ := httputil.DumpResponse(rsp, true)
-	w.Write(data)
+	req.Header = r.Header
+
+	rsp, err := client.Do(req)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer rsp.Body.Close()
+
+	// 复制 API 响应头部
+	for name, values := range rsp.Header {
+		for _, value := range values {
+			w.Header().Add(name, value)
+		}
+	}
+
+	// 返回 API 响应主体
+	w.WriteHeader(rsp.StatusCode)
+	if _, err := io.Copy(w, rsp.Body); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
