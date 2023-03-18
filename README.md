@@ -27,7 +27,8 @@ services:
 #  traefik:
 #    external: true
 ```
-
+# 测试
+```
 curl http://your.domains/v1/chat/completions \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer sk-yourrrgjhSJjx4bsSJjYsT3BlbkFJyMQjAH3sBcUzvGYFyGcl' \
@@ -36,3 +37,4 @@ curl http://your.domains/v1/chat/completions \
   "model": "gpt-3.5-turbo",
   "messages": [{"role": "user", "content": "我爱你,翻译成英语"}]
 }'
+```
