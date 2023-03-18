@@ -16,6 +16,5 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 # RUN apk update && apk --no-cache add openssl libgcc libstdc++ binutils
 WORKDIR /app
 COPY --from=builder /build/bin/chatgpt-api-proxy /app/chatgpt-api-proxy
-# VOLUME /etc/chat/
-# CMD ["./chat"]
+EXPOSE 80
 ENTRYPOINT ["/app/chatgpt-api-proxy"]
