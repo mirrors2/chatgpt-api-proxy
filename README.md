@@ -22,10 +22,9 @@ services:
 ```
 # 测试
 ```
-curl http://your.domains/v1/chat/completions \
-  -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer sk-yourrrgjhSJjx4bsSJjYsT3BlbkFJyMQjAH3sBcUzvGYFyGcl' \
-
+curl https://your.domains/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
   -d '{
   "model": "gpt-3.5-turbo",
   "messages": [{"role": "user", "content": "我爱你,翻译成英语"}]
