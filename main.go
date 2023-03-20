@@ -16,7 +16,7 @@ var (
 func main() {
 	router := http.NewServeMux()
 	// 路由转发
-	router.HandleFunc("/v1/chat/completions", HandleProxy)
+	router.HandleFunc("/", HandleProxy)
 
 	// 启动代理服务器
 	fmt.Println("API proxy server is listening on port 80")
@@ -63,6 +63,9 @@ func HandleProxy(w http.ResponseWriter, r *http.Request) {
 			w.Header().Add(name, value)
 		}
 	}
+	w.Header().Add("Cache-Control", "no-store")
+	w.Header().Add("access-control-allow-origin", "*")
+	w.Header().Add("access-control-allow-credentials", "true")
 
 	// 返回 API 响应主体
 	w.WriteHeader(rsp.StatusCode)
