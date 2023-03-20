@@ -7,8 +7,6 @@ import (
 	"net"
 	"net/http"
 	"time"
-
-	"github.com/gorilla/mux"
 )
 
 var (
@@ -16,7 +14,7 @@ var (
 )
 
 func main() {
-	router := mux.NewRouter()
+	router := http.NewServeMux()
 	// 路由转发
 	router.HandleFunc("/v1/chat/completions", HandleProxy)
 
