@@ -63,9 +63,19 @@ func HandleProxy(w http.ResponseWriter, r *http.Request) {
 			w.Header().Add(name, value)
 		}
 	}
-	w.Header().Add("Cache-Control", "no-store")
-	w.Header().Add("access-control-allow-origin", "*")
-	w.Header().Add("access-control-allow-credentials", "true")
+	head := map[string]string{
+		"Cache-Control":                    "no-store",
+		"access-control-allow-origin":      "*",
+		"access-control-allow-credentials": "true",
+	}
+	for k, v := range head {
+		if _, ok := rsp.Header[k]; !ok {
+			w.Header().Set(k, v)
+		}
+	}
+	rsp.Header.Del("content-security-policy")
+	rsp.Header.Del("content-security-policy-report-only")
+	rsp.Header.Del("clear-site-data")
 
 	// 返回 API 响应主体
 	w.WriteHeader(rsp.StatusCode)
