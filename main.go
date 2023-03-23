@@ -73,6 +73,9 @@ func HandleProxy(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set(k, v)
 		}
 	}
+	rsp.Header.Del("content-security-policy")
+	rsp.Header.Del("content-security-policy-report-only")
+	rsp.Header.Del("clear-site-data")
 
 	// 返回 API 响应主体
 	w.WriteHeader(rsp.StatusCode)
