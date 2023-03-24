@@ -6,7 +6,7 @@ on:
       - main
       - dev
     tags:
-      - '*'
+      - 'v*'
   pull_request:
     branches: [ "main","dev" ]
 
@@ -25,7 +25,9 @@ jobs:
         submodules: 'true'
     - name: Get current date
       id: date
-      run: echo "::set-output name=today::$(date +'%Y%m%d')"        
+      run: echo "::set-output name=today::$(date +'%Y%m%d')" 
+    - name: Set tag
+      run: echo ::set-env name=TAG::$(echo ${{ github.ref }} | sed 's/refs\/heads\///')             
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
     - name: Set up Docker Buildx
@@ -47,9 +49,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           #指定用户/仓库名
           tags: |
-            ${{ github.repository }}:${{ github.ref_slug }}
-            ${{ github.repository }}:latest
             ${{ github.repository }}:${{ steps.date.outputs.today }}
+            ${{ github.repository }}:${{ github.ref == 'refs/heads/main' || github.ref == 'refs/tags/v*'  ? 'latest' : github.ref_slug }}
     - name: Docker Hub Description
       #这里是通过md文件自动生成dockerhub描述的模块，也可以不需要
       uses: peter-evans/dockerhub-description@v3
