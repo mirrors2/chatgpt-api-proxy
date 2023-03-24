@@ -4,16 +4,25 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io"
+	"log"
 	"net"
 	"net/http"
+	"os"
 	"time"
 )
 
 var (
-	baseUrl = "https://api.openai.com"
+	baseUrl        = "https://api.openai.com"
+	OPENAI_API_KEY string
 )
 
 func main() {
+	if api_key := os.Getenv("OPENAI_API_KEY"); len(api_key) > 1 {
+		OPENAI_API_KEY = api_key
+		log.Println("已配置 OPENAI_API_KEY")
+	} else {
+		log.Println("未配置 OPENAI_API_KEY")
+	}
 	router := http.NewServeMux()
 	// 路由转发
 	router.HandleFunc("/", HandleProxy)
@@ -49,7 +58,9 @@ func HandleProxy(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	req.Header = r.Header
-
+	if len(OPENAI_API_KEY) > 1 {
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", OPENAI_API_KEY))
+	}
 	rsp, err := client.Do(req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
