@@ -25,9 +25,7 @@ jobs:
         submodules: 'true'
     - name: Get current date
       id: date
-      run: echo "::set-output name=today::$(date +'%Y%m%d')" 
-    - name: Set tag
-      run: echo ::set-env name=TAG::$(echo ${{ github.ref }} | sed 's/refs\/heads\///')             
+      run: echo "::set-output name=today::$(date +'%Y%m%d')"                  
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
     - name: Set up Docker Buildx
