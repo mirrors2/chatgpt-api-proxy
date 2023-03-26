@@ -1,0 +1,10 @@
+version: '3.7'
+services: 
+  chatgpt-api-proxy:
+    image: mirrors2/chatgpt-api-proxy
+    container_name: chatgpt-api-proxy 
+    restart: unless-stopped
+    ports:
+      - 80:80
+    # environment:
+    #   - OPENAI_API_KEY={openai_api_key}
