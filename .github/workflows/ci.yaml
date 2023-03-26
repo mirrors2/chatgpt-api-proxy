@@ -49,7 +49,6 @@ jobs:
           tags: |
             ${{ github.repository }}:${{ steps.date.outputs.today }}
             ${{ github.repository }}:${{ contains(github.ref,'main') && 'latest' || github.ref_slug }}
-            ${{if}}${{ github.repository }}:${{ github.ref == 'refs/tags/v*' || github.ref_slug }}
     - name: Docker Hub Description
       #这里是通过md文件自动生成dockerhub描述的模块，也可以不需要
       uses: peter-evans/dockerhub-description@v3
