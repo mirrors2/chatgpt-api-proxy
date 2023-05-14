@@ -1,7 +1,9 @@
-# chatgpt-api-proxy
+# chatgpt-api-proxy 
 
 <a title="Docker Image CI" target="_blank" href="https://github.com/mirrors2/chatgpt-api-proxy/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/mirrors2/chatgpt-api-proxy/ci.yaml?label=Actions&logo=github&style=flat-square"></a>
 <a title="Docker Pulls" target="_blank" href="https://hub.docker.com/r/mirrors2/chatgpt-api-proxy"><img src="https://img.shields.io/docker/pulls/mirrors2/chatgpt-api-proxy.svg?logo=docker&label=docker&style=flat-square"></a>
+
+# (后续没有新功能,推荐使用[opencatd-open](https://github.com/mirrors2/opencatd-open))
 
 chatgpt api 代理,已验证OpenCat,AssisChat,AMA(问天),chathub
 
